@@ -1,0 +1,18 @@
+package com.spring.join;
+
+public class MemberVO {
+	private String id;
+	private String pw;
+	private int idnum1;
+	private int idnum2;
+	private String gender;
+	private int phone1;
+	private int phone2;
+	private int phone3;
+	private String email1;
+	private String email2;
+	private String[] hobby;
+	private String intro;
+	
+	
+}

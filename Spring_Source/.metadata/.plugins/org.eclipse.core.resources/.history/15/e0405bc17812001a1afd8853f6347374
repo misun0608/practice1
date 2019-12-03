@@ -1,0 +1,13 @@
+package com.spring.springsungjuck;
+
+import java.util.ArrayList;
+
+public class SungjuckServiceImpl implements SungjuckService {
+
+	@Override
+	public ArrayList<SungjuckVO> getSungjucklist() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

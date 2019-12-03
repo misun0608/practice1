@@ -1,0 +1,28 @@
+package com.spring.springmember;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class MemberDAO {
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+	
+	public int insertMember(MemberVO memberVO) {
+		int result = 0;
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			pstmt = conn.prepareStatement("insert into smember values(?,?,?,?,?,?)");
+			pstmt.setString(1, memberVO.getId());
+			pstmt.setString(1, memberVO.getPassword());
+		}catch(Exception e) {
+			
+		}
+	}
+}

@@ -1,0 +1,11 @@
+package com.spring.springboard;
+
+import java.util.ArrayList;
+
+public interface BoardService {
+	public int getArticleCount() throws Exception;
+	public ArrayList<BoardVO> getArticles(int start, int end)throws Exception;
+	public void insertArticle(BoardVO article) throws Exception;
+	public BoardVO getArticle(int num) throws Exception;
+	
+}

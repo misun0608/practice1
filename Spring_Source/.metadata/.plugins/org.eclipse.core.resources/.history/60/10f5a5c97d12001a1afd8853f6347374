@@ -1,0 +1,23 @@
+package com.spring.springsungjuck;
+
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class SungjuckController {
+	
+	@Autowired
+	private SungjuckService sungjuckService;
+	
+	@RequestMapping("/sungjucklist.sj")
+	public String getSungjucklist(Model model)throws Exception{
+		ArrayList<SungjuckVO> sungjuck_list = sungjuckService.getSungjucklist();
+		model.addAttribute("sungjuck_list", sungjuck_list);
+		
+		return "sungjuck_list";
+	}
+}

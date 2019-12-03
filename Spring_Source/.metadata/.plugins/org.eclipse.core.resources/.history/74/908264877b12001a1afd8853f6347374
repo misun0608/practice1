@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+    <%@page import="java.sql.*" %>
+    <%@page import="javax.sql.*" %>
+    <%@page import="javax.naming.*" %>
+    <%@page import="com.spring.springsungjuck.SungjuckVO" %>
+    <%@page import="java.util.*" %>
+    
+    <%
+    	if((session.getAttribute("id") == null)||(!((String)session.getAttribute("id")).equals("admin"))){
+    		out.println("<script>");
+    		out.println("location.href='loginform.me'");
+    		out.println("</script>");
+    	}
+    %>
+<html>
+<head>
+<title>Insert title here</title>
+</head>
+<body>
+	<table border="1" align="center">
+		<tr>
+			<td colspan="2"><b>성적 목록</b>
+		</tr>
+	</table>
+</body>
+</html>

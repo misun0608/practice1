@@ -1,0 +1,44 @@
+package com.spring.springboard;
+
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service("boardService")
+public class BoardServiceImpl implements BoardService {
+	@Autowired(required=false)
+	private BoardDAO boardDAO = null;
+	
+	// 게시판 글 개수 구하기
+	@Override
+	public int getArticleCount() throws Exception {
+		try {
+			int res = boardDAO.getArticleCount();
+			return res;
+		}catch(Exception e) {
+			throw new Exception("글 개수구하기 실패", e);
+		}
+		
+		return count;
+	}
+
+	@Override
+	public ArrayList<BoardVO> getArticles(int start, int end) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void insertArticle(BoardVO article) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public BoardVO getArticle(int num) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

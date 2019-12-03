@@ -1,0 +1,48 @@
+package com.spring.join;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.spring.springhello3.LoginVO;
+
+/**
+ * Handles requests for the application home page.
+ */
+@Controller
+public class HomeController {
+	@RequestMapping(value = "join.me", method = RequestMethod.POST)
+		public String res(MemberVO vo, Model model) {	// 파라미터를 통해 전달된 데이터들을 vo를 통해서 한번에 처리할 수 있다 / 원래라면 일일히 request불러와야하는데 spring에서 한번에 처리
+			String id = vo.getId();
+			String pw = vo.getPw();
+			int idnum1 = vo.getIdnum1();
+			int idnum2 = vo.getIdnum2();
+			String gender = vo.getGender();
+			int phone1 = vo.getPhone1();
+			int phone2 = vo.getPhone2();
+			int phone3 = vo.getPhone3();
+			String email1 = vo.getEmail1();
+			String email2 = vo.getEmail2();
+			String[] hobby;
+			String intro = vo.getIntro();
+			
+			model.addAttribute("id", id);
+			model.addAttribute("pw", pw);
+			model.addAttribute("idnum", idnum1 + "-" +idnum2);
+			model.addAttribute("gender", gender);
+			model.addAttribute("phone", phone1 + "-" + phone2 + "-" + phone3);
+			model.addAttribute("email", email1 + "@" + email2);
+			model.addAttribute("hobby", hobby);
+			model.addAttribute("intro", intro);
+			
+			
+			return "res";
+		}
+}

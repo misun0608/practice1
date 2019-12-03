@@ -1,0 +1,10 @@
+package com.spring.springmember;
+
+public interface MemberService {
+	public int insertMember(MemberVO memberVO) throws Exception;
+	public int userCheck(MemberVO memberVO) throws Exception;
+	public ArrayList<MemberVO> getMemberlist(MemberVO memberVO) throws Exception;
+	public int insertMember(MemberVO memberVO) throws Exception;
+	public int insertMember(MemberVO memberVO) throws Exception;
+	
+}

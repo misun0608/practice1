@@ -1,0 +1,5 @@
+package com.spring.join;
+
+public class MemberVO {
+
+}

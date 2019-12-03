@@ -1,0 +1,24 @@
+package com.spring.springsungjuck;
+
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service("sungjuckService")
+public class SungjuckServiceImpl implements SungjuckService {
+
+	@Autowired(required=false)
+	private SungjuckDAO sungjuckDAO = null;
+	
+	@Override
+	public ArrayList<SungjuckVO> getSungjucklist() throws Exception {
+		try {
+			
+		}catch(Exception e) {
+			throw new Exception("성적 리스트 검색 실패.", e);
+		}
+		
+	}
+
+}

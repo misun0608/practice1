@@ -1,0 +1,14 @@
+package com.spring.springsungjuck;
+
+import java.util.ArrayList;
+
+import com.spring.springmember.MemberVO;
+
+public interface SungjuckService {
+	public ArrayList<SungjuckVO> getSungjucklist() throws Exception;
+	public int insertSungjuck(MemberVO memberVO, SungjuckVO sungjuckVO) throws Exception;
+	public SungjuckVO selectSungjuck(SungjuckVO sungjuckVO) throws Exception;
+	public SungjuckVO updateSungjuckForm(SungjuckVO sungjuckVO) throws Exception;
+	public int updateSungjuck(SungjuckVO sungjuckVO) throws Exception;
+	public int deleteSungjuck(SungjuckVO sungjuckVO) throws Exception;
+}

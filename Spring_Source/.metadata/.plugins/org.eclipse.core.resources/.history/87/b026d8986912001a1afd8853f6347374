@@ -1,0 +1,19 @@
+package com.spring.springsungjuck;
+/*
+create table ssungjuck(
+	id varchar2(15),
+	hakbun varchar2(10),
+	name varchar2(15),
+	kor number(3),
+	eng number(3),
+	math number(3),
+	tot number(3),
+	avg number(5,2),
+	grade varchar2(5),
+	primary key(id)
+	);
+*/
+public class SungjuckVO {
+	private String id;
+	private String 
+}

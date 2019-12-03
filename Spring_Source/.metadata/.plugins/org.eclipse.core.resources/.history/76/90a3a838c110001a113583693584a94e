@@ -1,0 +1,89 @@
+package com.spring.join;
+
+public class MemberVO {
+	private String id;
+	private String pw;
+	private int idnum1;
+	private int idnum2;
+	private String gender;
+	private int tel1;
+	private int tel2;
+	private int tel3;
+	private String email1;
+	private String email2;
+	private String[] hobby;
+	private String intro;
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getPw() {
+		return pw;
+	}
+	public void setPw(String pw) {
+		this.pw = pw;
+	}
+	public int getIdnum1() {
+		return idnum1;
+	}
+	public void setIdnum1(int idnum1) {
+		this.idnum1 = idnum1;
+	}
+	public int getIdnum2() {
+		return idnum2;
+	}
+	public void setIdnum2(int idnum2) {
+		this.idnum2 = idnum2;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public int getTel1() {
+		return tel1;
+	}
+	public void setTel1(int tel1) {
+		this.tel1 = tel1;
+	}
+	public int getTel2() {
+		return tel2;
+	}
+	public void setTel2(int tel2) {
+		this.tel2 = tel2;
+	}
+	public int getTel3() {
+		return tel3;
+	}
+	public void setTel3(int tel3) {
+		this.tel3 = tel3;
+	}
+	public String getEmail1() {
+		return email1;
+	}
+	public void setEmail1(String email1) {
+		this.email1 = email1;
+	}
+	public String getEmail2() {
+		return email2;
+	}
+	public void setEmail2(String email2) {
+		this.email2 = email2;
+	}
+	public String getHobby() {
+		return hobby;
+	}
+	public void setHobby(String hobby) {
+		this.hobby = hobby;
+	}
+	public String getIntro() {
+		return intro;
+	}
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
+}

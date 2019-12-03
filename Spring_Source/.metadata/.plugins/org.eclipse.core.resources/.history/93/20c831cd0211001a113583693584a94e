@@ -1,0 +1,28 @@
+@RequestMapping(value = "selectDept.me")
+   public String selectDeptProcess(DeptVO deptvo, Model model) {
+      Connection con = null;
+      PreparedStatement pstmt = null;
+      ResultSet rs = null;
+      
+      try {
+         String driver="oracle.jdbc.driver.OracleDriver";
+         String url="jdbc:oracle:thin:@127.0.0.1:1521:orcl";
+         
+         Class.forName(driver);
+         con = DriverManager.getConnection(url,"scott","123456");
+         String sql = "select * from dept_copy where deptno=?";
+         pstmt=con.prepareStatement(sql);
+         pstmt.setInt(1, deptvo.getDeptno());
+         rs = pstmt.executeQuery();
+         while(rs.next()) {
+            System.out.println(rs.getInt("deptno"));
+            deptvo.setDname(rs.getString("DNAME"));
+            deptvo.setLoc(rs.getString("LOC"));
+         }
+         
+         model.addAttribute("dept_info", deptvo);
+
+      } catch(Exception e) {e.printStackTrace();}
+      
+      return "dept_info";
+   }

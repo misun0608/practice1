@@ -1,0 +1,5 @@
+package com.spring.springboard;
+
+public interface BoardService {
+
+}

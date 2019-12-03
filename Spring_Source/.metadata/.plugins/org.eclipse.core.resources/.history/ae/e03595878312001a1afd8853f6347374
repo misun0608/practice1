@@ -1,0 +1,85 @@
+package com.spring.springsungjuck;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class SungjuckDAO {
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+	
+	// 성적리스트 출력(select & ArrayList)
+	public ArrayList<SungjuckVO> getSungjucklist(){
+		SungjuckVO vo = null;
+		ArrayList<SungjuckVO> sungjuck_list = null;
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			pstmt = conn.prepareStatement("select * from ssungjuck order by id");
+			rs = pstmt.executeQuery();
+			
+			
+			if(rs.next()) {
+				sungjuck_list = new ArrayList<SungjuckVO>();
+				do {
+					vo = new SungjuckVO();
+					
+					vo.setId(rs.getString("id"));
+					vo.setHakbun(rs.getString("hakbun"));
+					vo.setName(rs.getString("name"));
+					vo.setKor(rs.getInt("kor"));
+					vo.setEng(rs.getInt("eng"));
+					vo.setMath(rs.getInt("math"));
+					vo.setTot(rs.getInt("tot"));
+					vo.setAvg(rs.getDouble("avg"));
+					vo.setGrade(rs.getString("grade"));
+					
+					sungjuck_list.add(vo);
+				}while(rs.next());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.closeResource(rs, pstmt, conn);
+		}
+		return sungjuck_list;
+	}
+	
+	// 성적 입력(insert)
+	public int insertSungjuck(SungjuckVO sungjuckVO) {
+		int result = 0;
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			pstmt = conn.prepareStatement("select * from smember where id=?");
+			
+			if(rs.next()) {
+				pstmt = conn.prepareStatement("insert into ssungjuck values(?,?,?,?,?,?)");
+				pstmt.setString(1, sungjuckVO.getId());
+				result = pstmt.executeUpdate();
+			}
+
+			
+		}catch(Exception e) {
+			
+		}
+		
+		return result;
+	}
+	
+	// 성적info 출력(select)
+	
+	
+	// 성적 수정(update)
+	
+	
+	// 성적 삭제(delete)
+	
+}

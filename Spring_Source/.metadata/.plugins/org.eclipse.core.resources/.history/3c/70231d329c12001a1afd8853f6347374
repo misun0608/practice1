@@ -1,0 +1,159 @@
+package com.spring.springsungjuck;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Repository;
+
+import com.spring.springmember.MemberVO;
+
+@Repository
+public class SungjuckDAO {
+	private Connection conn = null;
+	private PreparedStatement pstmt = null;
+	private ResultSet rs = null;
+	
+	// 성적리스트 출력(select & ArrayList)
+	public ArrayList<SungjuckVO> getSungjucklist(){
+		SungjuckVO vo = null;
+		ArrayList<SungjuckVO> sungjuck_list = null;
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			pstmt = conn.prepareStatement("select * from ssungjuck order by id");
+			rs = pstmt.executeQuery();
+			
+			
+			if(rs.next()) {
+				sungjuck_list = new ArrayList<SungjuckVO>();
+				do {
+					vo = new SungjuckVO();
+					
+					vo.setId(rs.getString("id"));
+					vo.setHakbun(rs.getString("hakbun"));
+					vo.setName(rs.getString("name"));
+					vo.setKor(rs.getInt("kor"));
+					vo.setEng(rs.getInt("eng"));
+					vo.setMath(rs.getInt("math"));
+					vo.setTot(rs.getInt("tot"));
+					vo.setAvg(rs.getDouble("avg"));
+					vo.setGrade(rs.getString("grade"));
+					
+					sungjuck_list.add(vo);
+				}while(rs.next());
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.closeResource(rs, pstmt, conn);
+		}
+		return sungjuck_list;
+	}
+	
+	// 성적 입력(insert)
+	public int insertSungjuck(MemberVO memberVO, SungjuckVO sungjuckVO) {
+		int result = 0;
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			// 회원가입해서 있는 아이디만 입력하기 위해서
+			pstmt = conn.prepareStatement("select * from smember where id=?");
+			pstmt.setString(1, memberVO.getId());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				sungjuckVO.process();
+				
+				pstmt = conn.prepareStatement("insert into ssungjuck values(?,?,?,?,?,?,?,?,?)");
+				pstmt.setString(1, sungjuckVO.getId());
+				pstmt.setString(2, sungjuckVO.getHakbun());
+				pstmt.setString(3, sungjuckVO.getName());
+				pstmt.setInt(4, sungjuckVO.getKor());
+				pstmt.setInt(5, sungjuckVO.getEng());
+				pstmt.setInt(6, sungjuckVO.getMath());
+				pstmt.setInt(7, sungjuckVO.getTot());
+				pstmt.setDouble(8, sungjuckVO.getAvg());
+				pstmt.setString(9, sungjuckVO.getGrade());
+				
+				result = pstmt.executeUpdate();
+			}
+
+			
+		}catch(Exception e) {
+			System.out.println("성적입력오류" + e.getMessage());
+			e.printStackTrace();
+		}
+		finally {
+			JDBCUtil.closeResource(rs, pstmt, conn);
+		}
+		return result;
+	}
+	
+	// 성적info 출력(select)
+	public SungjuckVO selectSungjuck(SungjuckVO sungjuckVO) {
+		SungjuckVO vo = null;
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			pstmt = conn.prepareStatement("select * from ssungjuck where id = ?");
+			pstmt.setString(1, sungjuckVO.getId());
+			System.out.println("DAO" + sungjuckVO.getId());
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				vo = new SungjuckVO();
+				vo.setId(rs.getString("id"));
+				vo.setHakbun(rs.getString("hakbun"));
+				vo.setName(rs.getString("name"));
+				vo.setKor(rs.getInt("kor"));
+				vo.setEng(rs.getInt("eng"));
+				vo.setMath(rs.getInt("math"));
+				vo.setTot(rs.getInt("tot"));
+				vo.setAvg(rs.getDouble("avg"));
+				vo.setGrade(rs.getString("grade"));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.closeResource(rs, pstmt, conn);
+		}
+		return vo;
+	}
+	
+	// 성적 수정(update)
+	public int updateSungjuck(SungjuckVO sungjuckVO) {
+		int result = 0;
+		
+		try {
+			conn = JDBCUtil.getConnection();
+			
+			sungjuckVO.process();
+			
+			pstmt = conn.prepareStatement("update ssungjuck set kor=?, eng=?, math=?, tot=?, avg=?, grade=? where id=?");
+			pstmt.setInt(1, sungjuckVO.getKor());
+			pstmt.setInt(2, sungjuckVO.getEng());
+			pstmt.setInt(3, sungjuckVO.getMath());
+			pstmt.setInt(4, sungjuckVO.getTot());
+			pstmt.setDouble(5, sungjuckVO.getAvg());
+			pstmt.setString(6, sungjuckVO.getGrade());
+			pstmt.setString(7, sungjuckVO.getId());
+			
+			result = pstmt.executeUpdate();
+			
+			
+		}catch(Exception e) {
+			System.out.println("수정오류" + e.getMessage());
+			e.printStackTrace();
+		}finally {
+			JDBCUtil.closeResource(pstmt, conn);
+		}
+	}
+	
+	// 성적 삭제(delete)
+	
+}
