@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+		create table sboard(
+	    num number primary key,
+	    writer varchar2(15),
+	    passwd varchar2(15),  
+	    subject varchar2(50),
+	    email varchar2(50),
+	    content varchar2(2000),
+	    reg_date timestamp,
+	    readcount number,
+	    ref number,
+	    re_step number,
+	    re_level number
+	);
+
+    	create sequence sboard_seq
+	    start with 1
+	    increment by 1
+	    maxvalue 100000;
+ -->
+ 
+<mapper namespace="com.spring.mapper.BoardMapper">
+	<resultMap type="com.spring.springmybatisboard.BoardVO" id="BoardResultMap">	<!-- 이 구조와 같게 데이터를 반환시킬때 / 테이블 전체일때 사용-->
+		<result property="num" column="num" />
+		<result property="writer" column="writer" />
+		<result property="passwd" column="passwd" />
+		<result property="subject" column="subject" />
+		<result property="email" column="email" />
+		<result property="content" column="content" />
+		<result property="reg_date" column="reg_date" />
+		<result property="readcount" column="readcount" />
+		<result property="ref" column="ref" />
+		<result property="re_step" column="re_step" />
+		<result property="re_level" column="re_level" />
+	</resultMap>
+	
+	<resultMap type="java.util.HashMap" id="hashmapVO"><!-- hashmapVO에 대한 객체가 만들어지는데 키와 값을 쌍으로 저장 / 일부만 추출해야할때 사용 -->
+		<result property="num" column="num" />
+		<result property="writer" column="writer" />
+		<result property="passwd" column="passwd" />
+		<result property="subject" column="subject" />
+		<result property="email" column="email" />
+		<result property="content" column="content" />
+		<result property="reg_date" column="reg_date" />
+		<result property="readcount" column="readcount" />
+		<result property="ref" column="ref" />
+		<result property="re_step" column="re_step" />
+		<result property="re_level" column="re_level" />
+	</resultMap>
+	
+	<select id="getBoardcount" resultType="int">
+		select count(*) from sboard
+	</select>
+	
+	<select id="getBoardlist" parameterType="int" resultMap="BoardResultMap">
+		select * from (select rownum rnum, num, writer, passwd, subject, email, content, reg_date, 
+		readcount, ref, re_step, re_level 
+		from (select * from sboard order by ref desc, re_step asc)) 
+		where rnum>= #{startRow, javaType=int} and rnum	<![CDATA[<=	]]>#{endRow, javaType=int}
+	</select>
+	
+	<!-- writePro -->
+	<select id="writePro" resultType="Integer">
+		select max(num) from sboard
+	</select>
+	
+	<update id="writePro2" parameterType="com.spring.springmybatisboard.BoardVO">
+		
+		update sboard set re_step = re_step + 1 where ref= #{ref, javaType=int} and re_step <![CDATA[>]]> #{re_step, javaType=int}
+		
+	</update>
+	
+	<insert id="writePro3" parameterType="com.spring.springmybatisboard.BoardVO">
+		insert into sboard(num, writer, passwd, subject, email, content, 
+		reg_date, readcount, ref, re_step, re_level) 
+		values (sboard_seq.nextval, #{writer, javaType=String},#{passwd, javaType=String},
+		#{subject, javaType=String},#{email, javaType=String},#{content, javaType=String},
+		#{reg_date},#{readcount, javaType=int},#{ref, javaType=int},
+		#{re_step, javaType=int},#{re_level, javaType=int})
+		<!-- req_date , 자바타입에 Timestamp 썼는데 오류나서 지움 -->
+	</insert>
+	
+	<!-- selectBoard -->
+	<update id="selectBoard" parameterType="com.spring.springmybatisboard.BoardVO">
+		update sboard set readcount=readcount+1 where num = #{num, javaType=int}
+	</update>
+	
+	<select id="selectBoard2" parameterType="com.spring.springmybatisboard.BoardVO" resultMap="BoardResultMap">
+		select * from sboard where num = #{num, javaType=int}
+	</select>
+	
+	<!-- updatePro -->
+	<select id="updatePro" parameterType="com.spring.springmybatisboard.BoardVO" resultMap="BoardResultMap">
+		select passwd from sboard where num = #{num, javaType=int}
+	</select>
+	
+	<update id="updatePro2" parameterType="com.spring.springmybatisboard.BoardVO">
+		update sboard set writer=#{writer, javaType=String}, passwd=#{passwd, javaType=String}, 
+		subject=#{subject, javaType=String}, email=#{email, javaType=String}, 
+		content=#{content, javaType=String} where num=#{num, javaType=int}
+	</update>
+	
+	<!-- deletePro -->
+	<select id="deletePro" parameterType="com.spring.springmybatisboard.BoardVO" resultMap="BoardResultMap">
+		select passwd from sboard where num = #{num, javaType=int}
+	</select>
+	
+	<delete id="deletePro2" parameterType="com.spring.springmybatisboard.BoardVO">
+		delete from sboard where num = #{num, javaType=int}
+	</delete>
+	
+</mapper>
