@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+				 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mapper.CommentMapper">
+
+	<resultMap type="java.util.HashMap" id="hashmapVO">
+		<result property="comment_num" column="comment_num" />
+		<result property="board_num" column="board_num" />
+		<result property="writer" column="writer" />
+		<result property="pass" column="pass" />
+		<result property="content" column="content" />
+		<result property="reg_date" column="reg_date" />
+		<result property="reg_lev" column="reg_lev" />
+		<result property="parents_num" column="parents_num" />
+	</resultMap>
+	
+	<resultMap type="com.spring.springcomment.CommentVO" id="commentResultMap">
+		<result property="comment_num" column="COMMENT_NUM" />
+		<result property="board_num" column="BOARD_NUM" />
+		<result property="writer" column="WRITER" />
+		<result property="pass" column="PASS" />
+		<result property="content" column="CONTENT" />
+		<result property="reg_date" column="REG_DATE" />
+		<result property="reg_lev" column="REG_LEV" />
+		<result property="parents_num" column="PARENTS_NUM" />
+	</resultMap>
+	
+	<insert id="insertComment" parameterType="com.spring.springcomment.CommentVO">
+	<selectKey keyProperty="comment_num" resultType="int" order="BEFORE">
+			SELECT COMMENT3_SEQ.nextval From DUAL
+	</selectKey>
+		INSERT INTO COMMENT3 VALUES
+		(#{comment_num}, #{board_num}, #{writer}, #{pass}, #{content}, #{reg_date}, #{reg_lev}, #{parents_num})
+	</insert>
+	
+	<select id="getComment" parameterType="int" resultMap="commentResultMap">
+		SELECT * FROM COMMENT3 WHERE BOARD_NUM=#{num} ORDER BY COMMENT_NUM asc
+	</select>
+	
+	<delete id="commentDelete" parameterType="int">
+		DELETE COMMENT3 WHERE COMMENT_NUM=#{comment_num}
+	</delete>
+
+	<select id="getPass" parameterType="int" resultType="String">
+		SELECT PASS FROM COMMENT3 WHERE COMMENT_NUM=#{comment_num}
+	</select>
+	
+	<select id="detail" parameterType="int" resultMap="commentResultMap">
+		SELECT * FROM COMMENT3 WHERE COMMENT_NUM=#{comment_num}
+	</select>
+	
+	<update id="updateComment" parameterType="com.spring.springcomment.CommentVO">
+		UPDATE COMMENT3 SET
+		CONTENT=#{content}, REG_DATE=#{reg_date} WHERE COMMENT_NUM=#{comment_num}
+	</update>
+	
+</mapper>

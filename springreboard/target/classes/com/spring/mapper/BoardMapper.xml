@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+ create table board(
+    board_num number,
+    board_name varchar2(20),
+    board_pass varchar2(15),
+    board_subject varchar2(50),
+    board_content varchar2(2000),
+    board_originfile varchar2(50),
+    board_storedfile varchar2(50),
+    board_re_ref number,
+    board_re_lev number,
+    board_re_seq number,
+    board_readcount number,
+    board_date date,
+    primary key(board_num)
+    );
+ -->
+ 
+<mapper namespace="com.spring.mapper.BoardMapper">
+	<resultMap type="com.spring.springreboard.BoardVO" id="boardResultMap">
+		<result property="board_num" column="board_num" />
+		<result property="board_name" column="board_name" />
+		<result property="board_pass" column="board_pass" />
+		<result property="board_subject" column="board_subject" />
+		<result property="board_content" column="board_content" />
+		<result property="board_file" column="board_file" />
+		<result property="board_re_ref" column="board_re_ref" />
+		<result property="board_re_lev" column="board_re_lev" />
+		<result property="board_re_seq" column="board_re_seq" />
+		<result property="board_readcount" column="board_readcount" />
+		<result property="board_date" column="board_date" />
+	</resultMap>
+	
+	<!-- 글 개수 구하기 -->
+	<select id="getListcount" resultType="int">
+		select count(*) from board
+	</select>
+	
+	<!-- 글 목록 보기 -->
+	<select id="getBoardList" parameterType="int" resultMap="boardResultMap">
+		<![CDATA[
+		select * from (select rownum rnum, board_num, board_name, board_subject,
+				board_content, board_originfile, board_storedfile, board_re_ref, board_re_lev,
+				board_re_seq, board_readcount, board_date from
+				(select * from board order by board_re_ref desc, board_re_seq asc))
+				where rnum>=#{startrow, javaType=int} and rnum <=#{endrow, javaType=int}
+		]]>
+	</select>
+	
+	<!-- 글 내용 보기 -->
+	<select id="getDetail" parameterType="int" resultMap="boardResultMap">
+		select * from board where board_num = #{num}
+	</select>
+	
+	<!-- 글 쓰기 -->
+	<select id="getMaxnum" resultType="int">
+		select max(board_num) from board
+	</select>
+	
+	<insert id="boardInsert" parameterType="com.spring.springreboard.BoardVO">
+		insert into board(board_num, board_name, board_pass, board_subject, board_content, board_originfile, board_storedfile, board_re_ref, board_re_lev, board_re_seq, board_readcount, board_date) values(#{board_num},#{board_name},#{board_pass},#{board_subject},#{board_content},#{board_originfile},#{board_storedfile},#{board_num},0,0,0,sysdate)
+	</insert>
+	
+	<!--답변 쓰기 -->
+	<update id="updateReply" parameterType="com.spring.springreboard.BoardVO">
+		update board set board_re_seq=board_re_seq+1 
+		where board_re_ref=#{board_re_ref} and <![CDATA[board_re_seq>#{board_re_lev}]]>
+	</update>
+	
+	<insert id="replyInsert" parameterType="com.spring.springreboard.BoardVO">
+		insert into board(board_num, board_name, board_pass, board_subject,
+		board_content, board_originfile, board_storedfile, board_re_ref, board_re_lev, board_re_seq, 
+		board_readcount, board_date) 
+		values(#{board_num},#{board_name},#{board_pass},#{board_subject},#{board_content},'','',#{board_re_ref},#{board_re_lev},#{board_re_seq},0,sysdate)
+	</insert>
+	
+	<!-- 글 수정 -->
+	<update id="updateBoard" parameterType="com.spring.springreboard.BoardVO">
+		update board set board_subject=#{board_subject}, board_content=#{board_content} where board_num=#{board_num}
+	</update>
+	
+	<!-- 글 삭제 -->
+	<delete id="deleteBoard" parameterType="int">
+		delete from board where board_num=#{num}
+	</delete>
+	
+	<!-- 조회수 업데이트 -->
+	<update id="setReadCountUpdate" parameterType="int">
+		update board set board_readcount = board_readcount+1 where board_num = #{num}
+	</update>
+	
+	<!-- 글쓴이인지 확인 -->
+	<select id="selectPasswd" parameterType="int" resultType="String">
+		select board_pass from board where board_num=#{num}
+	</select>
+	
+	<!-- 댓글 쓰기 -->
+	
+</mapper>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+create table board2(
+BOARD_NUM number,
+BOARD_NAME varchar2(20),
+BOARD_PASS varchar2(15),
+BOARD_SUBJECT varchar2(50),
+BOARD_CONTENT varchar2(2000),
+BOARD_ORI_FILE varchar2(50),
+BOARD_STORED_FILE varchar2(50),
+BOARD_RE_REF number,
+BOARD_RE_LEV number,
+BOARD_RE_SEQ number,
+BOARD_READCOUNT number,
+BOARD_DATE date,
+primary key(BOARD_NUM)
+);
+ -->
+ 
+ <mapper namespace="com.spring.mapper.BoardMapper">
+ 	<resultMap type="com.spring.springboardM2.BoardVO" id="boardResultMap">
+ 		<result property="BOARD_NUM" column="BOARD_NUM" />
+ 		<result property="BOARD_NAME" column="BOARD_NAME" />
+ 		<result property="BOARD_PASS" column="BOARD_PASS" />
+ 		<result property="BOARD_SUBJECT" column="BOARD_SUBJECT" />
+ 		<result property="BOARD_CONTENT" column="BOARD_CONTENT" />
+ 		<result property="BOARD_ORI_FILE" column="BOARD_ORI_FILE" />
+ 		<result property="BOARD_STORED_FILE" column="BOARD_STORED_FILE" />
+ 		<result property="BOARD_RE_REF" column="BOARD_RE_REF" />
+ 		<result property="BOARD_RE_LEV" column="BOARD_RE_LEV" />
+ 		<result property="BOARD_RE_SEQ" column="BOARD_RE_SEQ" />
+ 		<result property="BOARD_READCOUNT" column="BOARD_READCOUNT" />
+ 		<result property="BOARD_DATE" column="BOARD_DATE" />
+ 	</resultMap>
+ 	
+ 	<select id="getCount" resultType="int">
+ 		select count(*) from board2
+ 	</select>
+ 	
+ 	<select id="getBoardList" parameterType="int" resultMap="boardResultMap">
+ 		SELECT * 
+ 		FROM (SELECT ROWNUM RNUM, BOARD_NUM, BOARD_NAME, BOARD_SUBJECT, BOARD_CONTENT, BOARD_ORI_FILE, BOARD_STORED_FILE, BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE
+ 				FROM (select *
+ 						from board2 order by BOARD_RE_REF DESC, BOARD_RE_SEQ ASC))
+ 		WHERE RNUM >= #{startrow} and RNUM <![CDATA[<=]]> #{endrow}
+ 	</select>
+ 	
+ 	<select id="getDetail" parameterType="Integer" resultMap="boardResultMap">
+ 		select * from board2 where BOARD_NUM=#{BOARD_NUM}
+ 	</select>
+ 	
+ 	<select id="selectMaxBoardNum" resultType="int">
+ 		select max(BOARD_NUM) from board2
+ 	</select>
+ 	
+ 	<insert id="boardInsert1" parameterType="com.spring.springboardM2.BoardVO">
+ 		insert into board2 (BOARD_NUM, BOARD_NAME, BOARD_PASS, BOARD_SUBJECT, BOARD_CONTENT, BOARD_ORI_FILE, BOARD_STORED_FILE, BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE)
+ 					values(#{BOARD_NUM},#{BOARD_NAME},#{BOARD_PASS},#{BOARD_SUBJECT},#{BOARD_CONTENT},#{BOARD_ORI_FILE},#{BOARD_STORED_FILE},#{BOARD_RE_REF},0,0,0,sysdate)
+ 	</insert>
+ 	
+ 	<update id="updateBoardReSeq" parameterType="com.spring.springboardM2.BoardVO">
+ 		update board2 set BOARD_RE_SEQ = BOARD_RE_SEQ + 1 where BOARD_RE_REF = #{BOARD_RE_REF} and BOARD_RE_SEQ > #{BOARD_RE_SEQ}
+ 	</update>
+ 	
+ 	<insert id="boardInsert2" parameterType="com.spring.springboardM2.BoardVO">
+ 		insert into board2 (BOARD_NUM, BOARD_NAME, BOARD_PASS, BOARD_SUBJECT, BOARD_CONTENT, BOARD_RE_REF, BOARD_RE_LEV, BOARD_RE_SEQ, BOARD_READCOUNT, BOARD_DATE)
+ 					values(#{BOARD_NUM},#{BOARD_NAME},#{BOARD_PASS},#{BOARD_SUBJECT},#{BOARD_CONTENT},#{BOARD_RE_REF},#{BOARD_RE_LEV},#{BOARD_RE_SEQ},0,sysdate)
+ 	</insert>
+ 	
+ 	<update id="boardUpdate" parameterType="com.spring.springboardM2.BoardVO">
+ 		update board2 set BOARD_SUBJECT = #{BOARD_SUBJECT}, BOARD_CONTENT = #{BOARD_CONTENT} where BOARD_NUM = #{BOARD_NUM}
+ 	</update>
+ 	
+ 	<select id="getBoardPass" parameterType="int" resultType="String">
+ 		select BOARD_PASS from board2 where BOARD_NUM = #{BOARD_NUM}
+ 	</select>
+ 	
+ 	<delete id="boardDelete" parameterType="int">
+ 		delete from board2 where BOARD_NUM = #{BOARD_NUM}
+ 	</delete> 
+ 	
+ 	<update id="setReadCountUpdate" parameterType="int">
+ 		update board2 set BOARD_READCOUNT = BOARD_READCOUNT+1 where BOARD_NUM = #{BOARD_NUM}
+ 	</update>
+ </mapper>

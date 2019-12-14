@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+				 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mapper.BoardMapper">
+
+	<resultMap type="java.util.HashMap" id="hashmapVO">
+		<result property="num" column="num" />
+		<result property="pass" column="pass" />
+		<result property="writer" column="writer" />
+		<result property="subject" column="subject" />
+		<result property="email" column="email" />
+		<result property="content" column="content" />
+		<result property="reg_date" column="reg_date" />
+		<result property="readcount" column="readcount" />
+		<result property="filename" column="filename" />
+		<result property="fileloc" column="fileloc" />
+	</resultMap>
+	
+	<resultMap type="com.spring.springboard3.BoardVO" id="boardResultMap">
+		<result property="num" column="NUM" />
+		<result property="pass" column="PASS" />
+		<result property="writer" column="WRITER" />
+		<result property="subject" column="SUBJECT" />
+		<result property="email" column="EMAIL" />
+		<result property="content" column="CONTENT" />
+		<result property="reg_date" column="REG_DATE" />
+		<result property="readcount" column="READCOUNT" />
+		<result property="filename" column="FILENAME" />
+		<result property="fileloc" column="FILELOC" />
+	</resultMap>
+	
+	<select id="getArticles" parameterType="map" resultMap="boardResultMap">
+		SELECT * FROM (SELECT ROWNUM RNUM, NUM, PASS, WRITER, SUBJECT, EMAIL,  
+		CONTENT, REG_DATE, READCOUNT, FILENAME, FILELOC FROM (SELECT * FROM  
+		BOARD3 ORDER BY NUM)) WHERE RNUM &gt;=#{start} AND RNUM &lt;=#{end}
+	</select>
+	
+	<select id="getArticleCount" resultType="int">
+		SELECT COUNT(*) FROM BOARD3
+	</select>
+	
+	<insert id="insertArticle" parameterType="com.spring.springboard3.BoardVO">
+	<selectKey keyProperty="num" resultType="int" order="BEFORE">
+			SELECT BOARD3_SEQ.nextval From DUAL
+	</selectKey>
+		INSERT INTO BOARD3 VALUES
+		(#{num}, #{pass}, #{writer}, #{subject}, #{email}, #{content} ,#{reg_date} ,#{readcount} ,#{filename}, #{fileloc})
+	</insert>
+	
+	<select id="getArticle" parameterType="String" resultMap="boardResultMap">
+		SELECT * FROM BOARD3 WHERE NUM=#{num}
+	</select>
+	
+	<update id="updateArticle" parameterType="com.spring.springboard3.BoardVO">
+		UPDATE BOARD3 SET
+		WRITER=#{writer}, SUBJECT=#{subject}, EMAIL=#{email}, CONTENT=#{content} WHERE NUM=#{num}
+	</update>
+	
+	<select id="selectPass" parameterType="int" resultType="String">
+		SELECT PASS FROM BOARD3 WHERE NUM=#{num}
+	</select>
+	
+	<update id="updateReadCount" parameterType="com.spring.springboard3.BoardVO">
+		UPDATE BOARD3 SET READCOUNT=#{readcount}+1 WHERE NUM=#{num}
+	</update>
+	
+	<delete id="deleteArticle" parameterType="String">
+		DELETE BOARD3 WHERE NUM=#{num}
+	</delete>
+	
+	
+</mapper>

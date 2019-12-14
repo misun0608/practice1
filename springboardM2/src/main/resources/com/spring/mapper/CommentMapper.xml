@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+create table board2_comment(
+ comment_num number primary key,
+ BOARD_NUM number,
+ comment_name varchar2(20),
+ comment_password varchar2(20),
+ comment_content varchar2(2000)
+);
+ -->
+ 
+ <mapper namespace="com.spring.mapper.CommentMapper">
+ 	<resultMap type="com.spring.springboardM2.CommentVO" id="commentResultMap">
+ 		<result property="comment_num" column="comment_num" />
+ 		<result property="BOARD_NUM" column="BOARD_NUM" />
+ 		<result property="comment_name" column="comment_name" />
+ 		<result property="comment_password" column="comment_password" />
+ 		<result property="comment_content" column="comment_content" />
+ 	</resultMap>
+ 	
+ 	<select id="getCommentCount" resultType="int">
+ 		select count(*) from board2_comment
+ 	</select>
+ 	
+ 	<select id="getMaxCommentNum" resultType="int">
+ 		select max(comment_num) from board2_comment
+ 	</select>
+ 
+	<select id="getCommentList" parameterType="int" resultMap="commentResultMap">
+		select * from board2_comment where board_num=#{BOARD_NUM} order by comment_num
+	</select>
+	
+	<insert id="insertComment" parameterType="com.spring.springboardM2.CommentVO">
+		insert into board2_comment(comment_num, BOARD_NUM, comment_name, comment_password, comment_content)
+							values(#{comment_num}, #{BOARD_NUM}, #{comment_name}, #{comment_password}, #{comment_content})
+	</insert>
+	
+	<select id="getCommentPassword" parameterType="int" resultType="String">
+		select comment_password from board2_comment where comment_num=#{comment_num}
+	</select>
+	
+	<update id="updateComment" parameterType="com.spring.springboardM2.CommentVO">
+		update board2_comment set comment_content=#{comment_content} where comment_num=#{comment_num}
+	</update>
+	
+	<delete id="deleteComment" parameterType="int">
+		delete from board2_comment where comment_num=#{comment_num}
+	</delete>
+ 
+</mapper>

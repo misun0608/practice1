@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 
+create table board_comment(
+    board_num number constraint board_fk references board(board_num) on delete cascade,
+    comment_num number,
+    comment_name varchar2(20),
+    comment_pass varchar2(15),
+    comment_content varchar2(2000),
+    primary key(comment_num)
+    );
+ -->
+ 
+<mapper namespace="com.spring.mapper.CommentMapper">
+	<resultMap type="com.spring.springreboard.CommentVO" id="commentResultMap">
+		<result property="board_num" column="board_num" />
+		<result property="comment_num" column="comment_num" />
+		<result property="comment_name" column="comment_name" />
+		<result property="comment_pass" column="comment_pass" />
+		<result property="comment_content" column="comment_content" />
+</resultMap>
+
+<!-- 덧글 개수 구하기 -->
+	<select id="getCommentcount" resultType="int">
+		select count(*) from board_comment
+	</select>
+	
+	<select id="getMaxnum" resultType="int">
+		select max(comment_num) from board_comment
+	</select>
+
+<!-- 덧글 리스트 구하기 -->
+	<select id="getCommentlist" parameterType="com.spring.springreboard.CommentVO" resultMap="commentResultMap">
+		select * from board_comment where board_num = #{board_num} order by comment_num
+	</select>
+
+<!-- 덧글 입력 -->
+	<insert id="insertComment" parameterType="com.spring.springreboard.CommentVO">
+		insert into board_comment values (#{board_num},#{comment_num},#{comment_name, jdbcType=VARCHAR},#{comment_pass},#{comment_content})
+	</insert>
+	
+<!-- 덧글 내용 불러오기 -->
+	<select id="selectComment" parameterType="int" resultMap="commentResultMap">
+		select * from board_comment where comment_num=#{num}
+	</select>
+	
+<!-- 덧글 수정 -->
+	<update id="updateComment" parameterType="com.spring.springreboard.CommentVO">
+		update board_comment set comment_name=#{comment_name}, comment_content=#{comment_content} where comment_num=#{comment_num}
+	</update>
+
+<!-- 덧글 삭제 -->
+	<delete id="deleteComment" parameterType="int">
+		delete from board_comment where comment_num=#{num}
+	</delete>
+<!-- 패스워드 확인 -->
+	<select id="getPasswd" parameterType="int" resultType="String">
+		select comment_pass from board_comment where comment_num=#{num}
+	</select>
+
+</mapper>
