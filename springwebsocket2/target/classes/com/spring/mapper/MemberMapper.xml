@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+   "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+   
+   <mapper namespace="com.spring.mapper.MemberMapper">
+      <!-- property가 키값이 된다.  -->
+         <resultMap type="java.util.HashMap" id="hashmapVO">
+            <result property="id" column="ID" />
+            <result property="password" column="PASSWORD" />
+            <result property="name" column="NAME" />
+         </resultMap>
+         
+         <resultMap type="com.spring.springwebsocket2.MemberVO" id="memberResultMap">
+            <result property="id" column="ID" />
+            <result property="password" column="PASSWORD" />
+            <result property="name" column="NAME" />
+         </resultMap>
+   
+   <insert id="insertMember" parameterType="com.spring.springwebsocket2.MemberVO">
+      INSERT INTO test_member VALUES(#{id, javaType=String}, #{password}, #{name, jdbcType=VARCHAR})
+   </insert>         
+   
+   <select id="userCheckMember" parameterType="String" resultType="int" >
+      select count(*) from test_member where id= #{id}
+   </select>
+   
+   <select id = "pickNameMember" parameterType = "String" resultType = "String">
+      select name from test_member where id = #{id}
+   </select>
+   
+   <!--  
+   <select id="getMembers"
+   resultMap = "memberResultMap" >
+   SELECT * FROM test_member order by id
+   </select>
+    -->
+   </mapper>
