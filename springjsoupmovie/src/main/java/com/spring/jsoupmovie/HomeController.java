@@ -86,12 +86,16 @@ public class HomeController {
 		
 		// 제목 긁기
 		ArrayList<String> list_title = new ArrayList<String>();
+		ArrayList<String> list_href = new ArrayList<String>();
 		ArrayList<String> list_point = new ArrayList<String>();
 		
 		for(Element title : element.select("td.title")) {
 			String tl = title.select("a").attr("title");
+			String link = "https://movie.naver.com/movie/" + title.select("a").attr("href");
 			System.out.println(tl);
+			System.out.println(link);
 			list_title.add(tl);
+			list_href.add(link);
 		}
 		
 		for(Element point : element.select("td.point")) {
@@ -105,6 +109,7 @@ public class HomeController {
 		// model.addObject("list_tabimg", list_tabimg);
 		model.addObject("list_title", list_title);
 		model.addObject("list_point", list_point);
+		model.addObject("list_href", list_href);
 		// model.addObject("list_name", list_name);
 		model.setViewName("crawl");
 		

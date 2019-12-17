@@ -5,6 +5,7 @@
     ArrayList<String> list_tabimg = (ArrayList<String>) request.getAttribute("list_tabimg");
     ArrayList<String> list_tablink = (ArrayList <String>) request.getAttribute("list_tablink");
     ArrayList<String> list_title = (ArrayList <String>) request.getAttribute("list_title");
+    ArrayList<String> list_href = (ArrayList <String>) request.getAttribute("list_href");
     ArrayList<String> list_point = (ArrayList <String>) request.getAttribute("list_point");
     %>
 <!DOCTYPE html>
@@ -45,7 +46,7 @@
 %>
 	<tr>
 	<td><font size="2"><%=i+1 %></font></td>
-	<td><font size="2"><%=list_title.get(i).toString() %></font></td>
+	<td><font size="2"><a href=<%=list_href.get(i).toString() %>><%=list_title.get(i).toString() %></a></font></td>
 	<%
 	if(!(list_point.size()==0)){	// jsp에서 넘어가야 존재하기때무넹....
 	%>
